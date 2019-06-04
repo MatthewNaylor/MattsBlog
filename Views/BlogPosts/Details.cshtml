@@ -1,0 +1,139 @@
+﻿@using MattsBlog.Models
+@model  BlogPost
+
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Blogger Variation 01 - Quadra Multi Concept HTML Theme</title>
+    <meta name="description" content="Quadra Theme Blogger Version" />
+    <!--Keywords -->
+    <meta name="keywords" content="modern, creative, website, html5, bootstrap responsive, parallax, soft, front-end, designer, coming soon, account, portfolio, photographer, grid, social, modules, design, personal, faq, one page, multi-purpose, branding, studio, agency, templates, css3, carousel, slider, corporate, theme, quadra, demos, blog, shop" />
+    <meta name="author" content="GoldEyes" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1" />
+    <!--Favicon -->
+    <link rel="icon" type="image/png" href="~/images/NM Favicon.png" />
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="~/images/apple-touch-icon.png" />
+
+
+</head>
+
+<!-- BODY START -->
+<body>
+
+
+    <!-- LOADER -->
+    <div class="page-loader bg-white">
+        <div class="loader-signal">
+            <div class="loader__figure"></div>
+        </div>
+    </div>
+    <!-- Post -->
+    <section class="py gray7 lh-lg">
+
+        <div id="content-image" class="parallax-container container radius-md xxl-py sm-mt">
+            <!-- Parallax Background -->
+            <div class="bg-parallax skrollr" data-anchor-target="#content-image" data-bottom-top="transform:translate3d(0, -150px, 0px);" data-top-bottom="transform:translate3d(0px, 100px, 0px);" data-background="@Model.MediaUrl"></div>
+        </div>
+        <!-- Text Block -->
+        <br />
+        <div class="container-sm">
+            <h3 class="bold-subtitle dark text-center">
+                @Model.Title
+            </h3>
+            <p class="xs-mt">
+                @Html.Raw(Model.Body)
+            </p>
+        </div>
+        <!-- End Text Block -->
+
+    </section>
+    <!-- End Post -->
+    <!-- Comments -->
+    <section class="py gray7 lh-lg">
+        <!-- Container for Comments -->
+        <div class="container-sm">
+
+            <!-- Title -->
+            <div class="divider-1 container-xs xs-mb">
+                @if (Model.Comments.Count() == 1)
+                {
+                    <span class="h3 bold-title dark">There is @Model.Comments.Count() comment</span>
+                }
+                else if (Model.Comments.Count() == 0)
+                {
+                    <span class="h3 bold-title dark">There are no comments</span>
+                }
+                else
+                {
+                <span class="h3 bold-title dark">There are @Model.Comments.Count() comments</span>
+                }
+            </div>
+            <!-- Row for comments -->
+            <div class="block-img container sm-mt">
+                @foreach (var comment in Model.Comments.OrderByDescending(c => c.Created))
+                {
+                        <!-- Comment -->
+                    <div class="row bb-1 border-gray1 xxs-py">
+                        <!-- Comment Img -->
+                        <div class="col-1 no-pm hidden-sm">
+                            <img src="~/images/NM Favicon.png" alt="user avatar" class="circle">
+                        </div>
+                        <!-- Texts -->
+                        <div class="col-11">
+                            <h5 class="bold-subtitle dark">
+                                <p>@comment.User.DisplayName</p>
+                                <span class="font-13 gray5 normal xxs-ml no-ls">
+                                    <i class="mini-mr"></i>
+                                    @comment.Created
+                                </span>
+                            </h5>
+                            <p class="xxs-my">@comment.CommentBody</p>
+                            @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                            {
+                                @Html.ActionLink("Edit", "Edit", "Comments", new { id = comment.Id }, null)@: | @Html.ActionLink("Delete", "Delete", "Comments", new { id = comment.Id }, null)
+                            }
+                        </div>
+                    </div>
+                    <!-- End Comment -->
+                }
+
+            </div>
+            <!-- End Row for comments -->
+        </div>
+        <!-- End Container for Comments -->
+    </section>
+    <!-- End Comments -->
+    <!-- Comment Form -->
+    <section class="py  bg-gray border-1 border-gray2">
+
+        <!-- Container for form -->
+        <div class="container-sm">
+            <!-- Form -->
+            <div id="form" class="t-center gray7">
+                <!-- Contact Form -->
+                @*@if User*@
+                    <!-- Message -->
+                @using (Html.BeginForm("Create", "Comments", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+
+                    @Html.Hidden("BlogPostId", Model.Id)
+                    @Html.HiddenFor(model => model.Slug)
+                    <textarea name="CommentBody" placeholder="Comment" class="classic_form large radius bg-gray2 bs-light-focus"></textarea>
+                    <button type="submit" class="bg-colored1 xl-btn font-12 long-btn xxs-mt slow width-auto click-effect white bold qdr-hover-6 radius-lg">Post Comment</button>
+                }
+                
+                <!-- End Form -->
+            </div>
+            <!-- End #form div -->
+        </div>
+
+    </section>
+    <!-- End Comment Form -->
+</body>
+<!-- Body End -->
+</html>

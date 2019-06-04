@@ -1,0 +1,105 @@
+﻿@using MattsBlog.Models
+@using PagedList;
+@using PagedList.Mvc;
+@using Microsoft.AspNet.Identity
+@model IPagedList<BlogPost>
+
+<!-- Announcement -->
+<section id="announcement" class="container relative">
+    <div class="announcement t-center">
+        Welcome to My Blog, I hope you enjoy what you read!
+        <span class="fa fa-close close-btn"></span>
+    </div>
+</section>
+<!-- End Announcement -->
+
+@{
+    var db = new ApplicationDbContext();
+    var userId = User.Identity.GetUserId();
+    var user = db.Users.Find(userId);
+}
+
+<!-- POSTS -->
+<section id="post-container" class="posts sm-pb">
+
+    <!-- Container for items -->
+    <div class="container">
+        <!-- Works -->
+        <div id="posts" class="cbp lightbox_selected">
+            <!-- Item -->
+            @foreach (var post in Model)
+            {
+                <div class="cbp-item post work life">
+                    <div class="cbp-caption">
+                        <div class="post-container qdr-hover-4">
+                            @*<a href="~/images/NM Favicon.png" class="post-img lightbox_item"><img src="~/images/NM Favicon.png" alt="Best musics while rest"></a>*@
+                            @if (post.MediaUrl != null)
+                            {
+                                <img class="img-responsive" src="@post.MediaUrl" alt="" />
+                            }
+                            <!-- Texts -->
+                            <p class="post-sender">Posted By Admin</p>
+                            <p class="post-title">@post.Title</p>
+                            <p class="post-date">
+                                @*<a id="Likebtn" class="post-likes">
+                                        <i class="fa fa-heart-o"></i>
+                                    </a>
+                                    <a>
+                                        <i class="fa fa-comment-o"></i>
+                                    </a>*@
+                                <span>@post.Created</span>
+                            </p>
+                            <p class="post-message">@post.Abstract</p>
+                            <a href="@Url.Action("Details", "BlogPosts", new { slug = post.Slug})" class="post-button qdr-hover-6 bg-colored-hover slow"><i class="fa fa-angle-double-right"></i></a>
+                            <br />
+                            @if (User.IsInRole("Admin"))
+                            {
+                                @Html.ActionLink("Edit", "Edit", "BlogPosts", new { slug = post.Slug }, null)@: | @Html.ActionLink("Delete", "Delete", "BlogPosts", new { slug = post.Slug }, null)
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+
+
+        </div>
+        <!-- End container for works -->
+    </div>
+    <!-- End Container for items -->
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchStr = ViewBag.Search }));
+
+    @*<div id="more-posts" class="animated" data-animation="fadeInUp" data-animation-delay="350">
+            <a href="~/Views/more-posts.html" class="cbp-l-loadMore-link more-post-button" rel="nofollow">
+                <span class="cbp-l-loadMore-defaultText">LOAD MORE</span>
+                <span class="cbp-l-loadMore-loadingText">LOADING...</span>
+                <span class="cbp-l-loadMore-noMoreLoading">NO MORE POSTS</span>
+            </a>
+        </div>*@
+
+</section>
+<!-- END POSTS -->
+<!-- CONTENT -->
+
+
+@section scripts {
+
+    @*<script>
+            var startingNumber = 0;
+
+            $("#Likebtn").click(function () {
+                {
+                    startingNumber++;
+                    $(this).text(startingNumber);
+                }
+
+                var likes = startingNumber;
+
+                $("#Likes").text(likes +  " Likes");
+            }
+
+
+        </script>*@
+
+}

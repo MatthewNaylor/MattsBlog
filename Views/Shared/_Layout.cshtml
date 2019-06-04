@@ -1,0 +1,312 @@
+﻿@using MattsBlog.Models
+@using Microsoft.AspNet.Identity
+
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Matts IT Blog</title>
+    <meta name="description" content="Matts IT Blog" />
+    <!--Keywords -->
+    <meta name="keywords" content="Matts IT Blog" />
+    <meta name="author" content="Matthew Naylor" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1" />
+    <!--Favicon -->
+    <link rel="icon" type="image/png" href="~/images/NM Favicon.png" />
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="~/images/NM Favicon.png" />
+
+    <!-- CSS Files -->
+    <link href="~/Content/plugins.css" rel="stylesheet" />
+    <!-- Main Styles -->
+    <link href="~/Content/theme.css" rel="stylesheet" />
+    <!-- Page Styles -->
+    <link href="~/Content/blogger-01.css" rel="stylesheet" />
+    <!-- Custom Styles -->
+    <link href="~/Content/custom.css" rel="stylesheet" />
+    <!-- End Page Styles -->
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+
+
+
+</head>
+
+<!-- BODY START -->
+<body>
+
+
+    <!-- LOADER -->
+    <div class="page-loader bg-white">
+        <div class="loader-signal">
+            <div class="loader__figure"></div>
+        </div>
+    </div>
+
+    @{
+        var db = new ApplicationDbContext();
+        var userId = User.Identity.GetUserId();
+        var user = db.Users.Find(userId);
+    }
+
+    <!-- NAVIGATION - Select nav color and offset -->
+    <nav id="navigation" class="white-nav shrink hide-by-scroll hover modern hover4 radius-drop" data-offset="0">
+        <!-- Columns -->
+        <div class="columns clearfix container-xl">
+            <!-- Logo -->
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="logo" data-infocard="#infocard">
+                    <a href="index.html">
+
+
+                        @if (user.ProfilePic != null)
+                        {
+                        <img class="img-responsive" src="@user.ProfilePic" alt="" />
+                        }
+                        else
+                        {
+                        <img class="img-responsive" src="~/images/NM Favicon.png" alt="" />
+                        }
+
+
+                        @*<img src="~/images/NM Favicon.png" data-second-logo="../images/NM Favicon.png" alt="Profile Pic">*@
+
+                    </a>
+                </div>
+                <!-- Infocard -->
+                <div id="infocard" class="infocard radius bg-white dark box-shadow radius-lg radius-no-rb o-hidden lh-normal">
+                    <div class="row calculate-height">
+                        <!-- Left Details -->
+                        <div class="col-7 font-14 t-left xs-py xs-pl">
+                            <h5 class="bold">@user.FirstName @user.LastName</h5>
+                            <p>@user.DisplayName</p>
+                        </div>
+                        <!-- right design -->
+                        <div class="col-5 cover" data-background="../images/infocard.png"></div>
+                    </div>
+                </div>
+                <!-- End Infocard -->
+            }
+            <!-- Right Elements; Nav Button, Language Button, Search .etc -->
+            <div class="nav-elements">
+                <ul class="clearfix nav no-ls normal">
+                    <!-- Search Button -->
+                    @*<li><a href="#" class="search-form-trigger"><i class="fa fa-search"></i></a></li>*@
+                    @using (Html.BeginForm("Index", "BlogPosts", FormMethod.Get, htmlAttributes: new { @class = "form" }))
+                    {
+                        <div class="controls controls-row search-row">
+                            <input id="searchStr" name="searchStr" class="classic_form bg-gray3 bs-light-hover bs-light-focus radius-lg" type="text" placeholder="Search" />
+                        </div>
+                    }
+                    <!-- Item With Dropdown -->
+                    <li class="dropdown-toggle">
+                        @*<a href="#" class="flag-item"><img src="~/images/flag-usa.png" alt=""> <span>En</span></a>
+                    <!-- Dropdown -->
+                    <ul class="dropdown-menu capitalize medium to-right">
+                        <!-- Item -->
+                        <li><a href="#" class="flag-item"><img src="~/images/flag-uk.png" alt=""> <span>UK</span></a></li>
+                        <!-- Item -->
+                        <li><a href="#" class="flag-item"><img src="~/images/flag-france.png" alt=""> <span>FR</span></a></li>*@
+                </ul>
+                @*</li>
+            </ul>*@
+            </div>
+            <!-- End Navigation Elements -->
+            <!-- Navigation Menu -->
+            <div class="nav-menu" style="width: 230.500px">
+                <ul class="nav clearfix uppercase">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+
+                    @if (Request.IsAuthenticated)
+                    {
+                        using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                        }
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { @class = "stay", id = "loginLink" })</li>
+                    }
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("Create", "Create", "BlogPosts")</li>
+                    }
+                </ul>
+            </div>
+            <!-- End Navigation Menu -->
+        </div>
+        <!-- End Columns -->
+    </nav>
+    <!-- END NAVIGATION -->
+    <!-- HOME -->
+    <section id="home" class="home white bg-soft bg-soft-gradient2 bg-cover">
+        <!-- Video - Parent * should have "relative" class -->
+        <div class="videobg bg-soft bg-soft-dark4" data-background="../images/videos/video-3-poster.jpg">
+            <video poster="../images/videos/video-3-poster.jpg" playsinline autoplay muted loop>
+                <source src="../images/videos/video-3.webm" type="video/webm">
+                <source src="../images/videos/video-3.mp4" type="video/mp4">
+            </video>
+        </div>
+        <!-- End Video -->
+        <!-- Vertical centered container -->
+        <div class="v-center t-center container">
+            <!-- Play Icon -->
+            <a img src="~/images/MN.png" class="lightbox inline-block animated" data-animation="fadeInUp" data-animation-delay="100">
+                @*<span class="icon-xl icon-animated1 border-white circle icon bg-white colored scale-hover font-16"><i class="fa fa-play"></i></span>*@
+            </a>
+            <!-- Title -->
+            <h1 class="text-lg1 playfair xxs-mt animated" data-animation="fadeInUp" data-animation-delay="200">IT Blog</h1>
+            <!-- Desc -->
+            <p class="font-17 xxs-mt animated" data-animation="fadeInUp" data-animation-delay="300">
+                @*Quadra is coded with This is have 1000+ helpers for create awesome website quickly.*@ <br class="hidden-xs">
+                @*And you can get a copy for only 15$ price!*@
+            </p>
+            <!-- Socials -->
+            <div class="t-center xs-mt animated" data-animation="fadeInUp" data-animation-delay="400">
+                <!-- Button -->
+                <a href="mailto:matthewbnaylor@gmail.com" target="_blank" class="social-icon bg-transparent white icon-md qdr-hover-3 fa fa-envelope-o mail"><i class="fa fa-envelope-o"></i></a>
+                @*<a href="https://twitter.com/RipTide_Roar" target="_blank" class="social-icon bg-transparent white icon-md qdr-hover-3 fa fa-twitter twitter"><i class="fa fa-twitter"></i></a>*@
+                <a href="https://www.linkedin.com/in/MatthewBNaylor/" target="_blank" class="social-icon bg-transparent white icon-md qdr-hover-3 fa fa-linkedin linkedin"><i class="fa fa-linkedin"></i></a>
+            </div>
+        </div>
+        <!-- End container -->
+    </section>
+    <!-- END HOME -->
+    <!-- Icon Navigation / you can edit color, background, font-size .etc styles with classes -->
+    <div id="posts-filter" class="icon-navigation hidden-sm hidden-xs nav-menu bg-gradient2 font-17 white radius bs-lg skrollr" data-0="top:22%; left:5%; opacity:1;" data-600-end="opacity:1; top:31%;" data-500-end="opacity:0.2; top:32%" data-end="top:34%;">
+        <ul class="nav">
+            <li data-toggle="popover" data-trigger="hover" title="Home" data-placement="right">
+                <a href="@Url.Action("Index", "Home")" class="fa fa-home click-effect"></a>
+            </li>
+            <li data-toggle="popover" data-trigger="hover" title="Contact" data-placement="right">
+                <a href="@Url.Action("Contact", "Home")" class="fa fa-envelope click-effect"></a>
+            </li>
+            <li data-toggle="popover" data-trigger="hover" title="" data-placement="right">
+                <hr class="white">
+            </li>
+            <!-- Filters -->
+            @*<li data-toggle="popover" data-trigger="hover" title="Show All" data-placement="right" data-filter="*" class="cbp-filter-item-active cbp-filter-item">
+                    <a href="#" class="fa stay fa-archive click-effect"></a>
+                </li>
+                <li data-toggle="popover" data-trigger="hover" title="Fashion" data-placement="right" data-filter=".fashion" class="cbp-filter-item">
+                    <a href="#" class="fa stay fa-heart click-effect"></a>
+                </li>
+                <li data-toggle="popover" data-trigger="hover" title="Life Style" data-placement="right" data-filter=".life" class="cbp-filter-item">
+                    <a href="#" class="fa stay fa-coffee click-effect"></a>
+                </li>
+                <li data-toggle="popover" data-trigger="hover" title="Travel" data-placement="right" data-filter=".travel" class="cbp-filter-item">
+                    <a href="#" class="fa stay fa-bus click-effect"></a>
+                </li>
+                <li data-toggle="popover" data-trigger="hover" title="Work" data-placement="right" data-filter=".work" class="cbp-filter-item">
+                    <a href="#" class="fa stay fa-briefcase click-effect"></a>
+                </li>
+                <!-- End Filters -->
+                <li data-toggle="popover" data-trigger="hover" title="" data-placement="right">
+                    <hr class="white">
+                </li>*@
+            @if (!Request.IsAuthenticated)
+            {
+                <li data-toggle="popover" data-trigger="hover" title="Login" data-placement="right">
+                    <a href="#" class="fa stay fa-laptop quick-contact-form-trigger click-effect"></a>
+                </li>
+            }
+        </ul>
+    </div>
+    <!-- End Icon Navigation -->
+
+    @RenderBody()
+
+
+    <section class="content lg-py t-center bg-soft bg-soft-gradient white cover" data-background="">
+        <!-- Container -->
+        <div class="container">
+            <div class="m-auto">
+                <img src="">
+            </div>
+        </div>
+        <!-- End Container -->
+
+    </section>
+    <!-- Footer Bottom -->
+    <footer id="footer" class="footer-bottom xxs-py">
+        <div class="container">
+            <div class="row clearfix">
+            </div>
+        </div>
+    </footer>
+
+
+
+
+
+
+    @if (!Request.IsAuthenticated)
+    {
+        <!-- Quick Login Form -->
+        <div class="quick-contact-form border-colored">
+            <h5 class="uppercase t-center extrabold">Login</h5>
+            <p class="t-center normal">Login quick and easy!</p>
+            <!-- Login Form -->
+
+            @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <input type="email" name="email" required placeholder="E-Mail" class="no-mt">
+                <input type="password" name="password" required placeholder="Password">
+                <button type="submit" class="bg-colored white click-effect qdr-hover-6 uppercase extrabold">Submit</button>
+            }
+
+            <!-- End Form -->
+            <a href="@Url.Action("Login", "Account")" class="inline-block colored-hover uppercase extrabold h6 no-pm qdr-hover-5">Or see Login page</a>
+        </div>
+        <!-- Login us button -->
+        <a href="#" class="drop-msg click-effect dark-effect"><i class="fa fa-laptop"></i></a>
+    }
+    <!-- Back To Top -->
+    <a id="back-to-top" href="#top"><i class="fa fa-angle-up"></i></a>
+
+
+
+
+
+    <!-- SEARCH FORM FOR NAV -->
+    <div class="fs-searchform">
+        <form id="fs-searchform" class="v-center container" action="pages-search-results.html" method="get">
+            <!-- Input -->
+            <input type="search" name="q" id="q" placeholder="Search on website.com" autocomplete="off">
+            <!-- Search Button -->
+            <button type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+        <div class="form-bg"></div>
+    </div>
+    <!-- END SEARCH FORM -->
+    <!-- Messages for contact form -->
+    <div id="error_message" class="clearfix">
+        <i class="fa fa-warning"></i>
+        <span>Validation error occured. Please enter the fields and submit it again.</span>
+    </div>
+    <!-- Submit Message -->
+    <div id="submit_message" class="clearfix">
+        <i class="fa fa-check"></i>
+        <span>Thank You ! Your email has been delivered.</span>
+    </div>
+
+
+    <!-- jQuery -->
+    <script src="~/Scripts/jquery.min.js"></script>
+    <!-- PAGE OPTIONS - You can find special scripts for this version -->
+    <script src="~/Scripts/plugins.js"></script>
+    <!-- MAIN SCRIPTS - Classic scripts for all theme -->
+    <script src="~/Scripts/scripts.js"></script>
+    <!-- END JS FILES -->
+    @RenderSection("scripts", required: false)
+</body>
+<!-- Body End -->
+</html>

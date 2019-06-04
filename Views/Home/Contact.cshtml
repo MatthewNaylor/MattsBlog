@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- BODY START -->
+<body>
+
+
+    <!-- LOADER -->
+    <div class="page-loader bg-white">
+        <div class="v-center">
+            <div class="loader-square bg-colored"></div>
+        </div>
+    </div>
+
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="t-center py">
+
+        <div class="container">
+            <!-- Title -->
+            <h1 class="extrabold-subtitle">Send me a Message</h1>
+            <h4 class="ligh">I would love your feedback!</h4>
+            <div class="title-strips-over dark"></div>
+
+            <div class="qdr-col-2 font-15">
+
+                <div class="t-left xs-mt gray7">
+                    <h4>
+                        <span class="social-icon white icon-sm fa fa-envelope circle mr-15"></span> E-mail: <a class="underline-hover colored-hover">matthewbnaylor@gmail.com</a>
+                    </h4>
+                    <h4 class="xxs-mt">
+                        <span class="social-icon white icon-sm fa fa-phone circle mr-15"></span> Phone: <a class="underline-hover colored-hover">336-880-6575</a>
+                    </h4>
+                </div>
+
+                <!-- Form -->
+                @*<div id="form" class="container xs-mt">*@
+                    <!-- Contact Form -->
+                    @using (Html.BeginForm("Contact", "Home", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <!-- Half Inputs -->
+                        <div class="half clearfix">
+                            <!-- Name -->
+                            <input type="text" name="FromName" required placeholder="Name" class="classic_form bg-gray3 bs-light-hover bs-light-focus radius-lg">
+                            <!-- Email -->
+                            <input type="email" name="FromEmail" required placeholder="E-Mail" class="classic_form bg-gray3 bs-light-hover bs-light-focus radius-lg">
+                        </div>
+                        <!-- Subject -->
+                        <input type="text" name="Subject" required placeholder="Subject" class="classic_form bg-gray3 bs-light-hover bs-light-focus radius-lg">
+                        <!-- Message -->
+                        <textarea name="Body" placeholder="Message" class="classic_form bg-gray3 bs-light-hover bs-light-focus radius"></textarea>
+                        <!-- Half Inputs -->
+                        <div class="half clearfix">
+                            <!-- Verify -->
+                            <input type="text" name="verify" id="verify" required class="classic_form bg-gray3 bs-light-hover bs-light-focus radius-lg">
+
+                            <!-- Send Button -->
+                            <button type="submit" class="classic_form bg-colored click-effect white extrabold qdr-hover-6 bs-lg-hover radius-lg">SEND</button>
+                            <!-- End Send Button -->
+                        </div>
+                    }
+                     
+                    <!-- End Form -->
+                @*</div>*@
+                <!-- End #form div -->
+
+            </div>
+        </div>
+    </section>
+    <!-- END CONTACT SECTION -->
+    <!-- Messages for contact form -->
+    <div id="error_message" class="clearfix">
+        <i class="fa fa-warning"></i>
+        <span>Validation error occured. Please enter the fields and submit it again.</span>
+    </div>
+    <!-- Submit Message -->
+    <div id="submit_message" class="clearfix">
+        <i class="fa fa-check"></i>
+        <span>Thank You ! Your email has been delivered.</span>
+    </div>
+
+</body>
+<!-- Body End -->
+</html>

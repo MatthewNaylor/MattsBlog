@@ -1,0 +1,46 @@
+﻿@using MattsBlog.Models
+@model LoginViewModel
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<body>
+    <!-- CONTENT -->
+    <section id="home" class="fullscreen height-auto-mobile mnh-full t-center cover" data-background="~/images/IT Background.jpg">
+        <!-- Container -->
+        <div class="container-xs mxw-400 v-center v-normal-mobile">
+
+            <div class="sm-py xs-pl xs-pr t-center bg-white dark box-shadow radius">
+                <!-- Title -->
+                <h3>Welcome Back</h3>
+                <h4 class="light no-pm xs-mb xxs-mt">Login With Your Account.</h4>
+                <!-- Contact Form -->
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <!-- Name -->
+                    <input type="email" name="email" required placeholder="Email" class="classic_form radius bg-gray">
+                    <!-- Email -->
+                    <input type="password" name="password" required placeholder="Password" class="classic_form radius bg-gray">
+                    <!-- Checkboxes -->
+                    <div class="t-left">
+                        <div class="classic_checkbox">
+                            <input type="checkbox" value="checkone" id="checkboxOne" name="RememberMe" /><label for="checkboxOne">Remember Me</label>
+                        </div>
+                    </div>
+                    <!-- Send Button -->
+                    <button type="submit" class="bg-colored1 click-effect white extrabold qdr-hover-1-bottom classic_form uppercase radius xxs-mt">Log in</button>
+                    <!-- End Send Button -->
+                
+                <!-- End Form -->
+                <p>Forgot your password? <a href="@Url.Action("ForgotPassword", "Account")" class="text-primary underline">Click here.</a> </p>
+                <p>Don't have an account? <a href="@Url.Action("Register", "Account")" class="text-primary underline">Create account.</a> </p>
+                @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+                }
+
+            </div>
+        </div>
+        <!-- End Container -->
+    </section>
+    <!-- END CONTENT -->
+</body>
+<!-- Body End -->
+</html>
